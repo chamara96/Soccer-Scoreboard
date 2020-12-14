@@ -15,4 +15,19 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::delete('roles_mass_destroy', 'Admin\RolesController@massDestroy')->name('roles.mass_destroy');
     Route::resource('users', 'Admin\UsersController');
     Route::delete('users_mass_destroy', 'Admin\UsersController@massDestroy')->name('users.mass_destroy');
+
+    // Main CRUD Operations
+
+    // teams
+    Route::resource('teams', 'Admin\Scoreboard\TeamController');
+
+    // games
+    Route::resource('games', 'Admin\Scoreboard\GameController');
+
+    // timer
+    Route::resource('timers', 'Admin\Scoreboard\TimerController');
+
+    // scoreboards
+    Route::resource('scoreboards', 'Admin\Scoreboard\ScoreboardController');
+
 });

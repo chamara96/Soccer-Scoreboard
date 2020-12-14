@@ -19,5 +19,12 @@ class UserSeed extends Seeder
         ]);
         $user->assignRole('administrator');
 
+
+        $user = User::create([
+            'name' => 'Chamara',
+            'email' => 'cmb@admin.com',
+            'password' => bcrypt('123456')
+        ]);
+        $user->assignRole('controller');
     }
 }

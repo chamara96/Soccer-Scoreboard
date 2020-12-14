@@ -13,6 +13,9 @@ class RoleSeed extends Seeder
     public function run()
     {
         $role = Role::create(['name' => 'administrator']);
-        $role->givePermissionTo('users_manage');
+        $role->givePermissionTo(['users_manage', 'dashboard_only']);
+
+        $role = Role::create(['name' => 'controller']);
+        $role->givePermissionTo('dashboard_only');
     }
 }

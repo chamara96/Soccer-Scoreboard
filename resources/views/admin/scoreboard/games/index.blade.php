@@ -4,15 +4,15 @@
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
-        <a class="btn btn-success" href="{{ route("admin.permissions.create") }}">
-            {{ trans('global.add') }} {{ trans('cruds.permission.title_singular') }}
+        <a class="btn btn-success" href="{{ route("admin.games.create") }}">
+            Add Game
         </a>
     </div>
 </div>
 
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.permission.title_singular') }} {{ trans('global.list') }}
+        Game List
     </div>
 
     <div class="card-body">
@@ -24,10 +24,25 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.permission.fields.id') }}
+                            Id
                         </th>
                         <th>
-                            {{ trans('cruds.permission.fields.title') }}
+                            Game Name
+                        </th>
+                        <th>
+                            Start Date
+                        </th>
+                        <th>
+                            Ground
+                        </th>
+                        <th>
+                            Game Logo
+                        </th>
+                        <th>
+                            Team A
+                        </th>
+                        <th>
+                            Team B
                         </th>
                         <th>
                             &nbsp;
@@ -35,29 +50,44 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($permissions as $key => $permission)
-                    <tr data-entry-id="{{ $permission->id }}">
+                    @foreach($games as $key => $game)
+                    <tr data-entry-id="{{ $game->id }}">
                         <td>
 
                         </td>
                         <td>
-                            {{ $permission->id ?? '' }}
+                            {{ $game->id ?? '' }}
                         </td>
                         <td>
-                            {{ $permission->name ?? '' }}
+                            {{ $game->game_name ?? '' }}
+                        </td>
+                        <td>
+                            {{ $game->date ?? '' }}
+                        </td>
+                        <td>
+                            {{ $game->ground ?? '' }}
+                        </td>
+                        <td>
+                            <img height="80px" src="/storage/images/game_logo/{{ $game->game_logo }}" alt="">
+                        </td>
+                        <td>
+                            {{ $teams->where('id', $game->team_a)->first()->team_name }}
+                        </td>
+                        <td>
+                            {{ $teams->where('id', $game->team_b)->first()->team_name }}
                         </td>
                         <td>
                             <a class="btn btn-xs btn-primary"
-                                href="{{ route('admin.permissions.show', $permission->id) }}">
+                                href="{{ route('admin.games.show', $game->id) }}">
                                 {{ trans('global.view') }}
                             </a>
 
                             <a class="btn btn-xs btn-info"
-                                href="{{ route('admin.permissions.edit', $permission->id) }}">
+                                href="{{ route('admin.games.edit', $game->id) }}">
                                 {{ trans('global.edit') }}
                             </a>
 
-                            <form action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST"
+                            <form action="{{ route('admin.games.destroy', $game->id) }}" method="POST"
                                 onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
                                 style="display: inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">
@@ -85,7 +115,7 @@
 <script>
     $(function () {
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        let deleteButtonTrans = '{{ trans('global.datatables.delete ') }}'
+        let deleteButtonTrans = "{{ trans('global.datatables.delete') }}"
         let deleteButton = {
             text: deleteButtonTrans,
             url: "{{ route('admin.permissions.mass_destroy') }}",

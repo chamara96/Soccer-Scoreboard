@@ -4,15 +4,15 @@
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
-        <a class="btn btn-success" href="{{ route("admin.permissions.create") }}">
-            {{ trans('global.add') }} {{ trans('cruds.permission.title_singular') }}
+        <a class="btn btn-success" href="{{ route("admin.teams.create") }}">
+            Add Team
         </a>
     </div>
 </div>
 
 <div class="card">
     <div class="card-header">
-        {{ trans('cruds.permission.title_singular') }} {{ trans('global.list') }}
+        Teams List
     </div>
 
     <div class="card-body">
@@ -24,10 +24,13 @@
 
                         </th>
                         <th>
-                            {{ trans('cruds.permission.fields.id') }}
+                            Id
                         </th>
                         <th>
-                            {{ trans('cruds.permission.fields.title') }}
+                            Team Name
+                        </th>
+                        <th>
+                            Logo
                         </th>
                         <th>
                             &nbsp;
@@ -35,29 +38,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($permissions as $key => $permission)
-                    <tr data-entry-id="{{ $permission->id }}">
+                    @foreach($teams as $key => $team)
+                    <tr data-entry-id="{{ $team->id }}">
                         <td>
 
                         </td>
                         <td>
-                            {{ $permission->id ?? '' }}
+                            {{ $team->id ?? '' }}
                         </td>
                         <td>
-                            {{ $permission->name ?? '' }}
+                            {{ $team->team_name ?? '' }}
+                        </td>
+                        <td>
+                            <img height="80px" src="/storage/images/team_logo/{{ $team->logo }}" alt="">
+                            {{-- {{ $team->logo ?? '' }} --}}
                         </td>
                         <td>
                             <a class="btn btn-xs btn-primary"
-                                href="{{ route('admin.permissions.show', $permission->id) }}">
+                                href="{{ route('admin.teams.show', $team->id) }}">
                                 {{ trans('global.view') }}
                             </a>
 
                             <a class="btn btn-xs btn-info"
-                                href="{{ route('admin.permissions.edit', $permission->id) }}">
+                                href="{{ route('admin.teams.edit', $team->id) }}">
                                 {{ trans('global.edit') }}
                             </a>
 
-                            <form action="{{ route('admin.permissions.destroy', $permission->id) }}" method="POST"
+                            <form action="{{ route('admin.teams.destroy', $team->id) }}" method="POST"
                                 onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
                                 style="display: inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">
@@ -85,7 +92,7 @@
 <script>
     $(function () {
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        let deleteButtonTrans = '{{ trans('global.datatables.delete ') }}'
+        let deleteButtonTrans = "{{ trans('global.datatables.delete') }}"
         let deleteButton = {
             text: deleteButtonTrans,
             url: "{{ route('admin.permissions.mass_destroy') }}",
