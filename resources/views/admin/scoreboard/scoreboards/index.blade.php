@@ -4,7 +4,7 @@
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
-        {{-- <a class="btn btn-success" href="{{ route("admin.timers.create") }}">
+        {{-- <a class="btn btn-success" href="{{ route("admin.scoreboards.create") }}">
         Add Timer
         </a> --}}
     </div>
@@ -77,7 +77,7 @@
                             {{ $scoreboard->timer_id ?? '' }}
                         </td>
 
-                        <td>
+                        {{-- <td>
                             <a class="btn btn-xs btn-primary" href="{{ route('admin.timers.show', $timer->id) }}">
                                 {{ trans('global.view') }}
                             </a>
@@ -93,6 +93,9 @@
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input type="submit" class="btn btn-xs btn-danger" value="{{ trans('global.delete') }}">
                             </form>
+                        </td> --}}
+                        <td>
+                            
                         </td>
 
                     </tr>

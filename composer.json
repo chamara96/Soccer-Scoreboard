@@ -6,12 +6,13 @@
     "type": "project",
     "require": {
         "php": "^7.2",
-        "fideloper/proxy": "^4.0",
         "doctrine/dbal": "^2.9",
+        "fideloper/proxy": "^4.0",
         "intervention/image": "^2.4",
         "laravel/framework": "^6.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^6.0",
+        "pusher/pusher-http-laravel": "^4.2",
         "spatie/laravel-permission": "^3.0"
     },
     "require-dev": {

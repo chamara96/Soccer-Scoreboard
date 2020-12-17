@@ -66,36 +66,16 @@
                             {{ $teams->where('id', $game->team_b)->first()->team_name }}
                         </td>
                     </tr>
-
+                    
 
                 </tbody>
             </table>
             <a style="margin-top:20px;" class="btn btn-default" href="{{ url()->previous() }}">
                 {{ trans('global.back_to_list') }}
             </a>
-
-            @if ($game->status != 2)
-            <a style="margin-top:20px;" class="btn btn-success" target="_blank"
-                href="{{ route("admin.score.index", ['ref' => Crypt::encrypt($game->id) ]) }}">
-                Go to Control Panel
+            <a style="margin-top:20px;" class="btn btn-success" href="{{ url()->previous() }}">
+                Go to Dashboard
             </a>
-            <a style="margin-top:20px;" class="btn btn-danger"
-                href="{{ route("admin.gameend", ['ref' => Crypt::encrypt($game->id) ]) }}">
-                End Game
-            </a>
-            @else
-            <a href="#">
-                Game has ended. Create new one
-            </a>
-            @endif
-
-            @if ($game->status !=0)
-            <a style="margin-top:20px;" class="btn btn-success" target="_blank"
-                href="{{ route("publicscore", ['ref' => $game->id ]) }}">
-                Go to Public View
-            </a>
-            @endif
-
         </div>
 
         <nav class="mb-3">

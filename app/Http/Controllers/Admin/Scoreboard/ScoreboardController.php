@@ -27,7 +27,7 @@ class ScoreboardController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.scoreboard.scoreboards.create');
     }
 
     /**

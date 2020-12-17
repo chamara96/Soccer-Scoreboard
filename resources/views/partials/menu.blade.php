@@ -19,28 +19,30 @@
                     Scoreboard Manage
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.teams.index") }}"
                             class="nav-link {{ request()->is('admin/teams') || request()->is('admin/teams/*') ? 'active' : '' }}">
                             <i class="fa-fw fas fa-unlock-alt nav-icon"> </i>
                             Teams
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route("admin.games.index") }}"
-                            class="nav-link {{ request()->is('admin/games') || request()->is('admin/games/*') ? 'active' : '' }}">
-                            <i class="fa-fw fas fa-briefcase nav-icon"> </i>
-                            Games
-                        </a>
-                    </li>
-                    <li class="nav-item">
+                    
+                    <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.timers.index") }}"
                             class="nav-link {{ request()->is('admin/timers') || request()->is('admin/timers/*') ? 'active' : '' }}">
                             <i class="fa-fw fas fa-user nav-icon"> </i>
                             Timers
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-left: 30px;">
+                        <a href="{{ route("admin.games.index") }}"
+                            class="nav-link {{ request()->is('admin/games') || request()->is('admin/games/*') ? 'active' : '' }}">
+                            <i class="fa-fw fas fa-briefcase nav-icon"> </i>
+                            Games
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.scoreboards.index") }}"
                             class="nav-link {{ request()->is('admin/scoreboards') || request()->is('admin/scoreboards/*') ? 'active' : '' }}">
                             <i class="fa-fw fas fa-user nav-icon"> </i>
@@ -60,7 +62,7 @@
                     {{ trans('cruds.userManagement.title') }}
                 </a>
                 <ul class="nav-dropdown-items">
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.permissions.index") }}"
                             class="nav-link {{ request()->is('admin/permissions') || request()->is('admin/permissions/*') ? 'active' : '' }}">
                             <i class="fa-fw fas fa-unlock-alt nav-icon">
@@ -69,7 +71,7 @@
                             {{ trans('cruds.permission.title') }}
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.roles.index") }}"
                             class="nav-link {{ request()->is('admin/roles') || request()->is('admin/roles/*') ? 'active' : '' }}">
                             <i class="fa-fw fas fa-briefcase nav-icon">
@@ -78,7 +80,7 @@
                             {{ trans('cruds.role.title') }}
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.users.index") }}"
                             class="nav-link {{ request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
                             <i class="fa-fw fas fa-user nav-icon">

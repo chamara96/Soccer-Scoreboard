@@ -27,6 +27,9 @@
                             Id
                         </th>
                         <th>
+                            Status
+                        </th>
+                        <th>
                             Game Name
                         </th>
                         <th>
@@ -59,6 +62,11 @@
                             {{ $game->id ?? '' }}
                         </td>
                         <td>
+                            <h4><span
+                                class="badge {{  $game->status === 0 ? 'badge-warning' : ($game->status === 1 ? 'badge-success' : 'badge-danger') }}">{{  $game->status === 0 ? 'Offline' : ($game->status === 1 ? 'Active' : 'Ended') }}</span></h4>
+
+                        </td>
+                        <td>
                             {{ $game->game_name ?? '' }}
                         </td>
                         <td>
@@ -77,13 +85,11 @@
                             {{ $teams->where('id', $game->team_b)->first()->team_name }}
                         </td>
                         <td>
-                            <a class="btn btn-xs btn-primary"
-                                href="{{ route('admin.games.show', $game->id) }}">
+                            <a class="btn btn-xs btn-primary" href="{{ route('admin.games.show', $game->id) }}">
                                 {{ trans('global.view') }}
                             </a>
 
-                            <a class="btn btn-xs btn-info"
-                                href="{{ route('admin.games.edit', $game->id) }}">
+                            <a class="btn btn-xs btn-info" href="{{ route('admin.games.edit', $game->id) }}">
                                 {{ trans('global.edit') }}
                             </a>
 

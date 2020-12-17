@@ -19,6 +19,7 @@ class CreateGamesTable extends Migration
             $table->string('date');
             $table->string('ground');
             $table->string('game_logo');
+            $table->integer('status')->default(0);
 
             $table->integer('team_a')->unsigned();
             $table->integer('team_b')->unsigned();

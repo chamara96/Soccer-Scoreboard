@@ -1,4 +1,7 @@
 <?php
+
+use App\Events\Event;
+
 Route::redirect('/', 'admin/home');
 
 Auth::routes(['register' => false]);
@@ -23,6 +26,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
 
     // games
     Route::resource('games', 'Admin\Scoreboard\GameController');
+    Route::get('gameend', 'Admin\Scoreboard\GameController@gameend')->name('gameend');
+
 
     // timer
     Route::resource('timers', 'Admin\Scoreboard\TimerController');
@@ -30,4 +35,25 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     // scoreboards
     Route::resource('scoreboards', 'Admin\Scoreboard\ScoreboardController');
 
+    // score controller
+    Route::resource('score', 'Admin\Score\ScoreController');
+    Route::post('/scorecontrollerstart', 'Admin\Score\ScoreController@btnstart')->name('scorecontrollerstart');
+    Route::post('/scorecontrollerstop', 'Admin\Score\ScoreController@btnstop')->name('scorecontrollerstop');
+    Route::post('/scorecontrollerpause', 'Admin\Score\ScoreController@btnpause')->name('scorecontrollerpause');
+    Route::post('/scorecontrollerresume', 'Admin\Score\ScoreController@btnresume')->name('scorecontrollerresume');
+    Route::post('/scorenavigate', 'Admin\Score\ScoreController@scorenavigate')->name('scorenavigate');
 });
+
+
+Route::get('publicscore', 'PublicScoreController@index')->name('publicscore');
+Route::get('publicscore_new', function () {
+
+    return view('testing');
+});
+
+Route::get('myevent', function () {
+    event(new Event('Hellooo chamara'));
+
+    return "Done";
+});
+// Route::get('publicscore', 'PublicScoreController@index')->name('publicscore');

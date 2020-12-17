@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Scoreboard\StoreGameRequest;
 use App\Http\Requests\Admin\Scoreboard\UpdateGameRequest;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -127,7 +128,7 @@ class GameController extends Controller
 
 
     /**
-     * Delete all selected Permission at once.
+     * Delete all selected  at once.
      *
      * @param Request $request
      */
@@ -139,4 +140,21 @@ class GameController extends Controller
     }
 
 
+    /**
+     * END the Game
+     *
+     * @param Request $request
+     */
+    public function gameend(Request $request)
+    {
+        try {
+            $decrypted = decrypt($request->ref);
+            $game = Game::find($decrypted);
+            $game->status = 2;
+            $game->save();
+            return redirect()->route('admin.games.index');
+        } catch (DecryptException $e) {
+            dd("Wrong URL");
+        }
+    }
 }
