@@ -58,7 +58,9 @@ class ScoreController extends Controller
 
             $game->status = 1;
             $game->save();
+            // return "1st";
         }
+        $last_scoreboard = Scoreboard::where('game_id', $decrypted)->latest()->first();
 
         $counter = Counters::where(['game_id' => $decrypted, 'timer_id' => $last_scoreboard->timer_id])->get();
 

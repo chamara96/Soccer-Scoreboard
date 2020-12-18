@@ -110,6 +110,14 @@
                         style="margin: 20px;">Resume</button>
                     @endif
 
+                    <button id="resume_button" class="btn btn-dark text-center" type="button"
+                    style="margin: 20px;" ><a target="_blank" href="{{ route("publicscore", ['ref' => $game->id ]) }}">Go to Public View</a></button>
+
+                    {{-- <a style="margin-top:20px;" class="btn btn-success text-center" target="_blank"
+                        href="{{ route("publicscore", ['ref' => $game->id ]) }}">
+                        Go to Public View
+                    </a> --}}
+
                     <div class="buttons-wrapper">
                         {{-- <input type="hidden" id="countdoun_num" class="form-control" min="0"> --}}
                         {{-- <button class="btn" id="start-countdown">Start Countdown</button>
