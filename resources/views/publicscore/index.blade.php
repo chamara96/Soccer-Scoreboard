@@ -44,7 +44,7 @@
                     <span class="dots">:</span>
                     <span class="seconds">00</span>
                 </h1>
-                <input type="number" id="countdoun_num" class="form-control" min="0">
+                <input type="hidden" id="countdoun_num" class="form-control" min="0">
                 <h4 id="timer_name" class="text-center">{{ $timer->timer_name }}</h4>
 
             </div>
