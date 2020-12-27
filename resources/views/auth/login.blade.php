@@ -12,7 +12,7 @@
                     @endif
                     <form method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
-                        <h1>{{ env('APP_NAME', 'Permissions Manager') }}</h1>
+                        <h1>{{ env('APP_NAME', 'Soccer Scoreboard') }}</h1>
                         <p class="text-muted">Login</p>
 
                         <div class="input-group mb-3">

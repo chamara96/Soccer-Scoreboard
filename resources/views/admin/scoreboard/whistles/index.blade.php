@@ -4,15 +4,15 @@
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
-        <a class="btn btn-success" href="{{ route("admin.timers.create") }}">
-            Add Timer
+        <a class="btn btn-success" href="{{ route("admin.whistles.create") }}">
+            Add Whistles
         </a>
     </div>
 </div>
 
 <div class="card">
     <div class="card-header">
-        Timer List
+        Whistles List
     </div>
 
     <div class="card-body">
@@ -27,16 +27,10 @@
                             Id
                         </th>
                         <th>
-                            Timer Name
+                            Whistle Name
                         </th>
                         <th>
-                            Time Duration
-                        </th>
-                        <th>
-                            Start Whistle
-                        </th>
-                        <th>
-                            End Whistle
+                            Sound Clip
                         </th>
                         <th>
                             &nbsp;
@@ -44,46 +38,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($timers as $key => $timer)
-                    <tr data-entry-id="{{ $timer->id }}">
+                    @foreach($whistles as $key => $whistle)
+                    <tr data-entry-id="{{ $whistle->id }}">
                         <td>
 
                         </td>
                         <td>
-                            {{ $timer->id ?? '' }}
+                            {{ $whistle->id ?? '' }}
                         </td>
                         <td>
-                            {{ $timer->timer_name ?? '' }}
-                        </td>
-                        <td>
-                            {{ $timer->time ?? '' }}
+                            {{ $whistle->whistle_name ?? '' }}
                         </td>
                         <td>
                             <audio controls>
-                                <source
-                                    src="/storage/sounds/whistle_clips/{{ $whistles->find($timer->start_whistle_id)->soundclip ?? ''}}"
-                                    type="audio/mpeg">
+                                <source src="/storage/sounds/whistle_clips/{{ $whistle->soundclip }}" type="audio/mpeg"> 
                             </audio>
-                            {{-- {{ $timer->whistle_id ?? '' }} --}}
+                            {{-- <img height="80px" src="/storage/images/team_logo/{{ $whistle->soundclip }}" alt=""> --}}
+                            {{-- {{ $whistle->soundclip ?? '' }} --}}
                         </td>
                         <td>
-                            <audio controls>
-                                <source
-                                    src="/storage/sounds/whistle_clips/{{ $whistles->find($timer->end_whistle_id)->soundclip ?? ''}}"
-                                    type="audio/mpeg">
-                            </audio>
-                            {{-- {{ $timer->whistle_id ?? '' }} --}}
-                        </td>
-                        <td>
-                            <a class="btn btn-xs btn-primary" href="{{ route('admin.timers.show', $timer->id) }}">
+                            <a class="btn btn-xs btn-primary"
+                                href="{{ route('admin.whistles.show', $whistle->id) }}">
                                 {{ trans('global.view') }}
                             </a>
 
-                            <a class="btn btn-xs btn-info" href="{{ route('admin.timers.edit', $timer->id) }}">
+                            <a class="btn btn-xs btn-info"
+                                href="{{ route('admin.whistles.edit', $whistle->id) }}">
                                 {{ trans('global.edit') }}
                             </a>
 
-                            <form action="{{ route('admin.timers.destroy', $timer->id) }}" method="POST"
+                            <form action="{{ route('admin.whistles.destroy', $whistle->id) }}" method="POST"
                                 onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
                                 style="display: inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">

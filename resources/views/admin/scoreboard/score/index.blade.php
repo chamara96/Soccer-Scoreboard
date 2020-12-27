@@ -31,7 +31,7 @@
                     <div class="col text-center">
                         <p>{{$team_a->team_name}}</p><img src="/storage/images/team_logo/{{ $team_a->logo }}"
                             style="width: 100px;height: 100px;">
-                        <h1 class="display-1 text-center">{{$last_scoreboard_updated->score_team_a}}</h1>
+                        <h1 id="score_a" class="display-1 text-center">{{$last_scoreboard_updated->score_team_a}}</h1>
                         <div class="row text-center">
                             <div class="col">
                                 <button {{ $front_timer['status']===1 ? '' : 'disabled' }} id="team_a_up"
@@ -47,7 +47,7 @@
                     <div class="col text-center">
                         <p class="text-center">{{$team_b->team_name}}</p><img
                             src="/storage/images/team_logo/{{ $team_b->logo }}" style="width: 100px;height: 100px;">
-                        <h1 class="display-1 text-center">{{$last_scoreboard_updated->score_team_b}}</h1>
+                        <h1 id="score_b" class="display-1 text-center">{{$last_scoreboard_updated->score_team_b}}</h1>
                         <div class="row text-center">
                             <div class="col"><button {{ $front_timer['status']===1 ? '' : 'disabled' }} id="team_b_up"
                                     class="btn btn-dark border rounded-0" type="button"
@@ -96,6 +96,14 @@
                     @if ($front_timer['status']==0)
                     <button id="start_button" class="btn btn-success text-center" type="button"
                         style="margin: 20px;">Start</button>
+
+                    <button style="display: none;" id="stop_button" class="btn btn-danger text-center" type="button"
+                        style="margin: 20px;">Stop</button>
+                    <button style="display: none;" id="pause_button" class="btn btn-warning text-center" type="button"
+                        style="margin: 20px;">Pause</button>
+
+                    <button style="display: none;" id="resume_button" class="btn btn-warning text-center" type="button"
+                        style="margin: 20px;">Resume</button>
                     @endif
 
                     @if ($front_timer['status']==1)
@@ -103,20 +111,46 @@
                         style="margin: 20px;">Stop</button>
                     <button id="pause_button" class="btn btn-warning text-center" type="button"
                         style="margin: 20px;">Pause</button>
+
+                    <button style="display: none;" id="start_button" class="btn btn-success text-center" type="button"
+                        style="margin: 20px;">Start</button>
+
+                    <button style="display: none;" id="resume_button" class="btn btn-warning text-center" type="button"
+                        style="margin: 20px;">Resume</button>
                     @endif
 
                     @if ($front_timer['status']==2)
                     <button id="resume_button" class="btn btn-warning text-center" type="button"
                         style="margin: 20px;">Resume</button>
+
+                    <button style="display: none;" id="start_button" class="btn btn-success text-center" type="button"
+                        style="margin: 20px;">Start</button>
+
+                    <button style="display: none;" id="stop_button" class="btn btn-danger text-center" type="button"
+                        style="margin: 20px;">Stop</button>
+                    <button style="display: none;" id="pause_button" class="btn btn-warning text-center" type="button"
+                        style="margin: 20px;">Pause</button>
                     @endif
 
-                    <button id="resume_button" class="btn btn-dark text-center" type="button"
-                    style="margin: 20px;" ><a target="_blank" href="{{ route("publicscore", ['ref' => $game->id ]) }}">Go to Public View</a></button>
+                    <button class="btn btn-dark text-center" type="button" style="margin: 20px;"><a target="_blank"
+                            href="{{ route("publicscore", ['ref' => $game->id ]) }}">Go to Public
+                            View</a></button>
 
                     {{-- <a style="margin-top:20px;" class="btn btn-success text-center" target="_blank"
                         href="{{ route("publicscore", ['ref' => $game->id ]) }}">
-                        Go to Public View
+                    Go to Public View
                     </a> --}}
+
+                    <audio style="display: none" id="whistle_start" controls>
+                        <source src="/storage/sounds/whistle_clips/1608881753.mp3" type="audio/mpeg">
+                    </audio>
+
+                    <audio style="display: none" id="whistle_end" controls>
+                        <source src="/storage/sounds/whistle_clips/1608881753.mp3" type="audio/mpeg">
+                    </audio>
+
+                    {{-- <button id="test_btn" class="btn btn-warning text-center" type="button"
+                        style="margin: 20px;">TEST</button> --}}
 
                     <div class="buttons-wrapper">
                         {{-- <input type="hidden" id="countdoun_num" class="form-control" min="0"> --}}
@@ -125,7 +159,44 @@
                             <button class="btn" id="stop-timer">Stop Timer</button>
                             <button class="btn" id="reset-timer">Reset Timer</button> --}}
                     </div>
+
+                    @foreach ($whistles as $whistle)
+                    <button id="whistle_{{$whistle->id}}" class="btn btn-warning text-center" type="button"
+                        style="margin: 20px;">{{$whistle->whistle_name}}</button>
+                    @endforeach
+
+                    <br>
+                    <h5>Songs Play List</h5>
+                        <div class="col">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Title</th>
+                                        <th scope="col">Song</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($songs as $song)
+                                    <tr>
+                                        <th scope="row">{{$song->id}}</th>
+                                        <td>{{$song->song_name}}</td>
+                                        <td>
+                                            <audio controls>
+                                                <source src="/storage/sounds/song_clips/{{ $song->songclip }}"
+                                                    type="audio/mpeg">
+                                            </audio>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+    
+                                </tbody>
+                            </table>
+                        </div>
                 </div>
+
+
+
             </div>
 
             @else
@@ -163,6 +234,19 @@
 
             var clockType = undefined;
             clockType = 'countdown';
+
+
+            // $('button#test_btn').on('click', function () {
+            //     $('#Test_Audio').get(0).play();
+            // })
+
+            // console.log("{!! $whistles[0]['soundclip'] !!}");
+
+            $("button#whistle_{!! $whistles[0]['id'] !!}").click( () => new Audio("/storage/sounds/whistle_clips/{!! $whistles[0]['soundclip'] !!}").play() );
+            $("button#whistle_{!! $whistles[1]['id'] !!}").click( () => new Audio("/storage/sounds/whistle_clips/{!! $whistles[1]['soundclip'] !!}").play() );
+            $("button#whistle_{!! $whistles[2]['id'] !!}").click( () => new Audio("/storage/sounds/whistle_clips/{!! $whistles[2]['soundclip'] !!}").play() );
+            // $("button#start_button").click( () => new Audio("/storage/sounds/whistle_clips/{!! $whistles[2]['soundclip'] !!}").play() );
+
 
             $('button#start-countdown').on('click', function () {
                 if ($(ammount).val() != '' && $(ammount).val() > 0) {
@@ -352,18 +436,20 @@
                 if (minutes == 0 && seconds == 0 && hasStarted == true) {
                     hasEnded = true
 
-                    $.ajax({
-                        url: "{{ route('admin.scorecontrollerstop') }}",
-                        data: {
-                            'game_id': {{ $game-> id}},
-                            'timer_id': $("#selected_timer_val").val(),
-                            },
-                        type: 'POST',
-                        success: function (response) {
-                            console.log(response);
-                            window.location.reload(true);
-                        }
-                    });
+                    $('#whistle_end')[0].play();
+
+                    // $.ajax({
+                    //     url: "{{ route('admin.scorecontrollerstop') }}",
+                    //     data: {
+                    //         'game_id': {{ $game-> id}},
+                    //         'timer_id': $("#selected_timer_val").val(),
+                    //         },
+                    //     type: 'POST',
+                    //     success: function (response) {
+                    //         console.log(response);
+                    //         window.location.reload(true);
+                    //     }
+                    // });
                     // alert('The Timer has Ended !')
                 }
             }
@@ -375,7 +461,8 @@
 
             // End Timer Functions
 
-
+            $('#whistle_start').attr("src", "/storage/sounds/whistle_clips/{{$wistles_paths['whistle_path_start']}}");
+            $('#whistle_end').attr("src", "/storage/sounds/whistle_clips/{{$wistles_paths['whistle_path_end']}}");
 
             
             $('#countdoun_num').val("{{$front_timer['time']}}");
@@ -399,9 +486,11 @@
                 // $hours = floor($seconds / 3600);
                 var paused_sec="{{$front_timer['time']}}";
                 let min = Math.floor(paused_sec / 60)
+                minutes=min;
                 let sec = paused_sec - (min * 60)
-                $(m).text(min);
-                $(s).text(sec);
+                seconds=sec;
+                $(m).text(pad(min));
+                $(s).text(pad(sec));
             }
 
 
@@ -415,13 +504,31 @@
             $("#dropdown-timer").on('change', function () {
                 $("#selected_timer").text($("#dropdown-timer :selected").text());
                 $("#selected_timer_val").val($("#dropdown-timer :selected").val());
+                $('#whistle_start').attr("src", "/storage/sounds/whistle_clips/{{$wistles_paths['whistle_path_start']}}");
+                $('#whistle_end').attr("src", "/storage/sounds/whistle_clips/{{$wistles_paths['whistle_path_end']}}");
+                $.ajax({
+                    url: "{{ route('admin.changetimer') }}",
+                    data: {
+                        'game_id': {{ $game-> id}},
+                        'timer_id': $("#selected_timer_val").val(),
+                    },
+                    type: 'POST',
+                    success: function (response) {
+                            console.log(response);
+                            // window.location.reload(true);
+                    }
+                });
+
             });
 
 
 
             $("#start_button").on('click', function () {
                 $(this).prop("disabled", true);
-                
+                $('#whistle_start')[0].play();
+            });
+
+            $('#whistle_start').on('ended', function() {
                 $.ajax({
                     url: "{{ route('admin.scorecontrollerstart') }}",
                     data: {
@@ -434,11 +541,16 @@
                             window.location.reload(true);
                     }
                 });
+
             });
 
 
             $("#stop_button").on('click', function () {
                 $(this).prop("disabled", true);
+                $('#whistle_end')[0].play();
+            });
+
+            $('#whistle_end').on('ended', function() {
                 $.ajax({
                     url: "{{ route('admin.scorecontrollerstop') }}",
                     data: {
@@ -458,6 +570,7 @@
 
             $("#pause_button").on('click', function () {
                 $(this).prop("disabled", true);
+                pauseClock();
                 $.ajax({
                     url: "{{ route('admin.scorecontrollerpause') }}",
                     data: {
@@ -467,7 +580,13 @@
                     type: 'POST',
                     success: function (response) {
                         console.log(response);
-                        window.location.reload(true);
+
+                        $("#start_button").hide();
+                        $("#stop_button").show();
+                        $("#resume_button").show();
+                        $("#pause_button").hide();
+                        $("#pause_button").prop("disabled", false);
+                        // window.location.reload(true);
                         // $("#stop_button").addClass('displayhide');
                         // $("#start_button").removeClass('displayhide');
                     }
@@ -476,6 +595,7 @@
 
             $("#resume_button").on('click', function () {
                 $(this).prop("disabled", true);
+                countdown()
                 $.ajax({
                     url: "{{ route('admin.scorecontrollerresume') }}",
                     data: {
@@ -485,7 +605,13 @@
                     type: 'POST',
                     success: function (response) {
                         console.log(response);
-                        window.location.reload(true);
+
+                        $("#start_button").hide();
+                        $("#stop_button").show();
+                        $("#pause_button").show();
+                        $("#resume_button").hide();
+                        $("#resume_button").prop("disabled", false);
+                        // window.location.reload(true);
                         // $("#stop_button").addClass('displayhide');
                         // $("#start_button").removeClass('displayhide');
                     }
@@ -502,12 +628,14 @@
                         'team': 'a',
                         'dir': 'up',
                         'game_id': {{ $game-> id}},
-                'timer_id': {{ $last_scoreboard_updated-> timer_id}},
+                        'timer_id': {{ $last_scoreboard_updated-> timer_id}},
                             },
                 type: 'POST',
                 success: function (response) {
                     console.log(response);
-                    window.location.reload(true);
+                    $('#score_a').text(response.score_team_a);
+                    $("#team_a_up").prop("disabled", false);
+                    // window.location.reload(true);
                 }
                         });
                 });
@@ -525,7 +653,9 @@
                 type: 'POST',
                 success: function (response) {
                     console.log(response);
-                    window.location.reload(true);
+                    $('#score_a').text(response.score_team_a);
+                    $("#team_a_down").prop("disabled", false);
+                    // window.location.reload(true);
                 }
                         });
                 });
@@ -544,7 +674,9 @@
                 type: 'POST',
                 success: function (response) {
                     console.log(response);
-                    window.location.reload(true);
+                    $('#score_b').text(response.score_team_b);
+                    $("#team_b_up").prop("disabled", false);
+                    // window.location.reload(true);
                 }
                         });
                 });
@@ -562,7 +694,9 @@
                 type: 'POST',
                 success: function (response) {
                     console.log(response);
-                    window.location.reload(true);
+                    $('#score_b').text(response.score_team_b);
+                    $("#team_b_down").prop("disabled", false);
+                    // window.location.reload(true);
                 }
                         });
             });

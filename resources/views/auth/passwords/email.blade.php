@@ -10,7 +10,7 @@
                         <h1>
                             <div class="login-logo">
                                 <a href="#">
-                                    {{ env('APP_NAME', 'Permissions Manager') }}
+                                    {{ env('APP_NAME', 'Soccer Scoreboard') }}
                                 </a>
                             </div>
                         </h1>

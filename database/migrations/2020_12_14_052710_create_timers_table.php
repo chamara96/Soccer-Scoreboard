@@ -17,10 +17,22 @@ class CreateTimersTable extends Migration
             $table->increments('id');
             $table->string('timer_name');
             $table->integer('time');
+            $table->integer('start_whistle_id')->unsigned()->nullable();
+            $table->integer('end_whistle_id')->unsigned()->nullable();
 
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned()->nullable();
             $table->integer('deleted_by')->unsigned()->nullable();
+
+            $table->foreign('start_whistle_id')
+                ->references('id')
+                ->on('whistles')
+                ->onDelete('cascade');
+
+            $table->foreign('end_whistle_id')
+                ->references('id')
+                ->on('whistles')
+                ->onDelete('cascade');
 
             $table->timestamps();
         });

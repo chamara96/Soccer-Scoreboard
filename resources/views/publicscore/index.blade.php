@@ -15,7 +15,7 @@
             <div class="col-3" style="height: 100%;">
                 <div class="row">
                     <div class="col text-center" style="margin-top: 50px;">
-                        <h1 class="display-1 text-center">{{$livescore->score_team_a}}</h1>
+                        <h1 id="team_a_score" class="display-1 text-center">{{$livescore->score_team_a}}</h1>
                     </div>
                 </div>
                 <div class="row">
@@ -44,13 +44,14 @@
                     <span class="dots">:</span>
                     <span class="seconds">00</span>
                 </h1>
-                <input type="hidden" id="countdoun_num" class="form-control" min="0">
-                <h4 class="text-center">{{ $timer->timer_name }}</h4>
+                <input type="number" id="countdoun_num" class="form-control" min="0">
+                <h4 id="timer_name" class="text-center">{{ $timer->timer_name }}</h4>
+
             </div>
             <div class="col">
                 <div class="row">
                     <div class="col text-center" style="margin-top: 50px;">
-                        <h1 class="display-1 text-center">{{$livescore->score_team_b}}</h1>
+                        <h1 id="team_b_score" class="display-1 text-center">{{$livescore->score_team_b}}</h1>
                     </div>
                 </div>
                 <div class="row">
@@ -63,6 +64,13 @@
                             src="/storage/images/team_logo/{{ $team_b->logo }}" height="300px"></div>
                 </div>
             </div>
+
+            {{-- <button class="btn" id="start-countdown">Start Countdown</button>
+            <button class="btn" id="resume-timer">Resume Timer</button>
+            <button class="btn" id="stop-timer">Stop Timer</button>
+            <button class="btn" id="reset-timer">Reset Timer</button> --}}
+
+
         </div>
     </div>
     <script src="assets-public/js/jquery.min.js"></script>
@@ -128,6 +136,9 @@
             function pad(d) {
                 return (d < 10) ? '0' + d.toString() : d.toString()
             }
+
+            // console.log("Hiiii");
+            // console.log(pad(12));
 
             function startClock() {
                 hasStarted = false
@@ -228,6 +239,7 @@
             }
 
             function countdown() {
+                console.log('inside countdown');
                 hasStarted = true
                 interval = setInterval(() => {
                     if (hasEnded == false) {
@@ -297,7 +309,13 @@
             console.log(current_timer_status);
 
             if (current_timer_status==0) {
-                console.log("Not Started")
+                console.log("Not Started");
+
+                var totsec_init="{{$front_timer['time']}}";
+                let min_val_init = Math.floor(totsec_init / 60)
+                let sec_val_init = totsec_init - (min_val_init * 60)
+                $('#timer_main .minutes').text(pad(min_val_init));
+                $('#timer_main .seconds').text(pad(sec_val_init));
             } 
             else if (current_timer_status==1) {
                 console.log("Started");
@@ -313,9 +331,11 @@
                 // $hours = floor($seconds / 3600);
                 var paused_sec="{{$front_timer['time']}}";
                 let min = Math.floor(paused_sec / 60)
+                minutes=min;
                 let sec = paused_sec - (min * 60)
-                $(m).text(min);
-                $(s).text(sec);
+                seconds=sec;
+                $(m).text(pad(min));
+                $(s).text(pad(sec));
             }
 
 
@@ -327,7 +347,80 @@
             });
 
 
+            // ====================================
+            // let whistle_audio= Audio();
+            Pusher.logToConsole = false;
 
+            var pusher = new Pusher('f83b6d2fe18b90359101', {
+                cluster: 'ap2'
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function(data) {
+                console.log(data.message);
+
+                if (data.message.team=='a') {
+                    $('#team_a_score').text(data.message.score);
+                } else if (data.message.team=='b') {
+                    $('#team_b_score').text(data.message.score);
+                }
+
+                if (data.message.action=='start'){
+                    if ($(ammount).val() != '' && $(ammount).val() > 0) {
+                        startClock()
+                    }
+                    // console.log("/storage/sounds/whistle_clips/"+data.message.whistle_path);
+                    // $('#whistle_player_start').get(0).play();
+                    // $("#whistle_player_start").prop('muted', true);
+                    // $("#whistle_player_start")[0].play();
+                    // const audio2 = new Audio("/storage/sounds/whistle_clips/"+data.message.whistle_path);
+                    // audio2.play();
+                    // let whistle_audio = new Audio("/storage/sounds/whistle_clips/"+data.message.whistle_path);
+                    // whistle_audio.play();
+                    console.log("T-Start");
+                } else if (data.message.action=='stop'){
+                    pauseClock();
+                    // restartClock();
+                    console.log("T-Stop");
+                    // $('#whistle_player_end').get(0).play();
+                    // $("#whistle_player_end").prop('muted', true);
+                    // $("#whistle_player_end")[0].play();
+                    // new Audio("/storage/sounds/whistle_clips/"+data.message.whistle_path).play();
+                    // const audio2 = new Audio("/storage/sounds/whistle_clips/"+data.message.whistle_path);
+                    // audio2.play();
+                }else if (data.message.action=='pause'){
+                    pauseClock();
+                    console.log("T-Pause");
+                }else if (data.message.action=='resume'){
+                    switch (clockType) {
+                        case 'countdown':
+                            countdown()
+                            break
+                        //    case 'cronometer':
+                        //        cronometer()
+                        //        break
+                        default:
+                            break;
+                    }
+                    console.log("T-Resume");
+                }
+
+                if (data.message.timer_id){
+
+                    var totsec=data.message.time * 60;
+                    let min_val = Math.floor(totsec / 60)
+                    let sec_val = totsec - (min_val * 60)
+                    $('#timer_main .minutes').text(pad(min_val));
+                    $('#timer_main .seconds').text(pad(sec_val));
+
+                    $('#timer_name').text(data.message.timer_name);
+                    $('#countdoun_num').val(data.message.time * 60);
+                }
+
+                // window.location.reload(true);
+                // alert(JSON.stringify(data));
+            });
+            // ====================================
             
 
 
@@ -335,20 +428,9 @@
 
     </script>
 
-    <script>
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('f83b6d2fe18b90359101', {
-            cluster: 'ap2'
-        });
-
-        var channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', function(data) {
-            console.log(data);
-            window.location.reload(true);
-            // alert(JSON.stringify(data));
-        });
-    </script>
+    {{-- <script>
+        
+    </script> --}}
 
 </body>
 

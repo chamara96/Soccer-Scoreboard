@@ -30,8 +30,8 @@ class PublicScoreController extends Controller
             $team_a = Team::find($game->team_a);
             $team_b = Team::find($game->team_b);
 
-            $livescore=Scoreboard::where('game_id',$gid)->latest()->first();
-            $timer=Timer::find($livescore->timer_id);
+            $livescore = Scoreboard::where('game_id', $gid)->latest()->first();
+            $timer = Timer::find($livescore->timer_id);
 
 
             // TIMER
@@ -45,34 +45,32 @@ class PublicScoreController extends Controller
             if ($counter->isEmpty()) {
                 $front_timer = [
                     'status' => 0,
-                    'time' => Timer::find($livescore->timer_id)->time
+                    'time' => (Timer::find($livescore->timer_id)->time) * 60
                 ];
             } elseif ($counter->last()->status == 0) {
                 $front_timer = [
                     'status' => 0,
-                    'time' => Timer::find($livescore->timer_id)->time
+                    'time' => (Timer::find($livescore->timer_id)->time) * 60
                 ];
             } elseif ($counter->last()->status == 1) {
-    
+
                 if (count($counter) != 1) {
                     $temp = $counter[count($counter) - 2]->status;
                     if ($temp == 2) {
                         $stared_time = $counter->last()->created_at;
                         $now_time = Carbon::now();
                         $totalDuration = $counter->last()->remaining_time  - $now_time->diffInSeconds($stared_time);
-    
+
                         $front_timer = [
                             'status' => 1,
                             'time' =>  $totalDuration
                         ];
-                    } 
+                    }
+                } else {
+                }
 
-                }
-                else{
-                }
-    
-    
-    
+
+
                 $stared_time = $counter->last()->created_at;
                 $now_time = Carbon::now();
                 $totalDuration =  $counter->last()->remaining_time - $now_time->diffInSeconds($stared_time);
@@ -80,7 +78,6 @@ class PublicScoreController extends Controller
                     'status' => 1,
                     'time' =>  $totalDuration
                 ];
-    
             } elseif ($counter->last()->status == 2) {
                 $paused_time = $counter->last()->created_at;
                 $stared_time = $counter[count($counter) - 2]->created_at;
@@ -89,15 +86,12 @@ class PublicScoreController extends Controller
                     'status' => 2,
                     'time' =>  $totalDuration
                 ];
-    
             }
             // End Timer
 
-            return view('publicscore.index',compact('game','team_a','team_b','livescore','timer','front_timer'));
-
+            return view('publicscore.index', compact('game', 'team_a', 'team_b', 'livescore', 'timer', 'front_timer'));
+        } else {
+            dd($request->all());
         }
-        dd($request->all());
-        // $game=Game::
-
     }
 }

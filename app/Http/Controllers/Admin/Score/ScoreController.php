@@ -16,7 +16,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\Controller;
-
+use App\Song;
+use App\Whistle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -36,7 +37,7 @@ class ScoreController extends Controller
             $decrypted = decrypt($request->ref);
             // dd($decrypted);
         } catch (DecryptException $e) {
-            dd("Error");
+            dd("Error ID");
         }
 
         $game = Game::find($decrypted);
@@ -80,14 +81,14 @@ class ScoreController extends Controller
             // counter table is empty
             $front_timer = [
                 'status' => 0,
-                'time' => Timer::find($last_scoreboard->timer_id)->time
+                'time' => (Timer::find($last_scoreboard->timer_id)->time) * 60
             ];
             // dd($front_timer);
         } elseif ($counter->last()->status == 0) {
 
             $front_timer = [
                 'status' => 0,
-                'time' => Timer::find($last_scoreboard->timer_id)->time
+                'time' => (Timer::find($last_scoreboard->timer_id)->time) * 60
             ];
             // dd("Staus=0");
         } elseif ($counter->last()->status == 1) {
@@ -103,15 +104,14 @@ class ScoreController extends Controller
                         'status' => 1,
                         'time' =>  $totalDuration
                     ];
-                } 
+                }
                 // else {
                 //     # code...
                 // }
             }
             // $temp = $counter[count($counter) - 2]->status;
             // dd(count($counter));
-            else{
-
+            else {
             }
 
 
@@ -145,6 +145,7 @@ class ScoreController extends Controller
 
 
         $timers = Timer::all();
+        $whistles = Whistle::all();
 
         $game = Game::find($decrypted);  //updated game 
 
@@ -153,9 +154,64 @@ class ScoreController extends Controller
 
         $last_scoreboard_updated = Scoreboard::where('game_id', $decrypted)->latest()->first();
 
-        return view('admin.scoreboard.score.index', compact('timers', 'front_timer', 'game', 'last_scoreboard_updated', 'team_a', 'team_b'));
+        $wistles_paths = [
+            'whistle_path_start' => Whistle::find(Timer::find($last_scoreboard_updated->timer_id)->start_whistle_id)->soundclip,
+            'whistle_path_end' => Whistle::find(Timer::find($last_scoreboard_updated->timer_id)->end_whistle_id)->soundclip
+        ];
+
+        $songs = Song::all();
+
+        return view('admin.scoreboard.score.index', compact('timers', 'songs', 'wistles_paths', 'front_timer', 'game', 'last_scoreboard_updated', 'team_a', 'team_b', 'whistles'));
         // return view('admin.scoreboard.scoreboards.index', compact('scoreboards'));
     }
+
+
+    public function index_ajax(Request $request)
+    {
+
+        $decrypted = $request->game_id;
+
+        $last_scoreboard = Scoreboard::where('game_id', $decrypted)->latest()->first();
+
+        $counter = Counters::where(['game_id' => $decrypted, 'timer_id' => $last_scoreboard->timer_id])->get();
+
+        $front_timer = [
+            'status' => 0,
+            'time' => 0
+        ];
+
+        if ($counter->isEmpty()) {
+            $front_timer = [
+                'status' => 0,
+            ];
+        } elseif ($counter->last()->status == 0) {
+            $front_timer = [
+                'status' => 0,
+            ];
+        } elseif ($counter->last()->status == 1) {
+
+            if (count($counter) != 1) {
+                $temp = $counter[count($counter) - 2]->status;
+                if ($temp == 2) {
+                    $front_timer = [
+                        'status' => 1,
+                    ];
+                }
+            } else {
+            }
+
+            $front_timer = [
+                'status' => 1,
+            ];
+        } elseif ($counter->last()->status == 2) {
+            $front_timer = [
+                'status' => 2,
+            ];
+        }
+
+        return $front_timer;
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -244,12 +300,18 @@ class ScoreController extends Controller
             'game_id' => $request->game_id,
             'timer_id' => $request->timer_id,
             'status' => 1,
-            'remaining_time' => (Timer::find($request->timer_id)->time)*60,
+            'remaining_time' => (Timer::find($request->timer_id)->time) * 60,
             'created_by' => Auth::id(),
         ];
         Counters::create($counter);
 
-        event(new Event('btnStart Clicked'));
+        // $msg = 'start';
+        $msg = [
+            'action' => 'start',
+            'whistle_path' => Whistle::find(Timer::find($request->timer_id)->start_whistle_id)->soundclip
+        ];
+
+        event(new Event($msg));
 
         return $new_score;
     }
@@ -283,7 +345,13 @@ class ScoreController extends Controller
         ];
         Counters::create($counter);
 
-        event(new Event('btnStop Clicked'));
+        // $msg = 'stop';
+        $msg = [
+            'action' => 'stop',
+            'whistle_path' => Whistle::find(Timer::find($request->timer_id)->end_whistle_id)->soundclip
+        ];
+
+        event(new Event($msg));
         return $new_score;
     }
 
@@ -316,8 +384,13 @@ class ScoreController extends Controller
         ];
         Counters::create($counter);
 
-        event(new Event('btnPause Clicked'));
+        // $msg = 'pause';
+        $msg = [
+            'action' => 'pause',
+            // 'whistle_path'=>Whistle::find(Timer::find($request->timer_id)->end_whistle_id)->soundclip
+        ];
 
+        event(new Event($msg));
         return $counter;
     }
 
@@ -346,8 +419,13 @@ class ScoreController extends Controller
         ];
         Counters::create($counter);
 
-        event(new Event('btnResume Clicked'));
+        // $msg = 'resume';
+        $msg = [
+            'action' => 'resume',
+            // 'whistle_path'=>Whistle::find(Timer::find($request->timer_id)->end_whistle_id)->soundclip
+        ];
 
+        event(new Event($msg));
         return $counter;
     }
 
@@ -366,16 +444,32 @@ class ScoreController extends Controller
             if ($request->team == 'a') {
                 if ($request->dir == 'up') {
                     $last_scoreboard['score_team_a'] = $last_scoreboard['score_team_a'] + 1;
+                    $msg = [
+                        'team' => 'a',
+                        'score' => $last_scoreboard['score_team_a']
+                    ];
                 } elseif ($request->dir == 'down') {
                     $last_scoreboard['score_team_a'] = $last_scoreboard['score_team_a'] - 1;
+                    $msg = [
+                        'team' => 'a',
+                        'score' => $last_scoreboard['score_team_a']
+                    ];
                 } else {
                     return "Error";
                 }
             } elseif ($request->team == 'b') {
                 if ($request->dir == 'up') {
                     $last_scoreboard['score_team_b'] = $last_scoreboard['score_team_b'] + 1;
+                    $msg = [
+                        'team' => 'b',
+                        'score' => $last_scoreboard['score_team_b']
+                    ];
                 } elseif ($request->dir == 'down') {
                     $last_scoreboard['score_team_b'] = $last_scoreboard['score_team_b'] - 1;
+                    $msg = [
+                        'team' => 'b',
+                        'score' => $last_scoreboard['score_team_b']
+                    ];
                 } else {
                     return "Error";
                 }
@@ -388,10 +482,34 @@ class ScoreController extends Controller
 
         $new_score = Scoreboard::create($last_scoreboard);
 
-        event(new Event('btnNavi Clicked'));
+        event(new Event($msg));
 
         return $new_score;
         // return $last_scoreboard;
 
+    }
+
+
+    /**
+     * Change Timer Drop down in controller dashboard.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function changetimer(Request $request)
+    {
+        $last_scoreboard = Scoreboard::where('game_id', $request->game_id)->latest()->first();
+        $last_scoreboard->timer_id = $request->timer_id;
+        $last_scoreboard->update();
+        // return $last_scoreboard;
+        $timer = Timer::find($request->timer_id);
+        $msg = [
+            'timer_id' => $timer->id,
+            'timer_name' => $timer->timer_name,
+            'time' => $timer->time
+        ];
+
+        event(new Event($msg));
+        return $timer;
     }
 }

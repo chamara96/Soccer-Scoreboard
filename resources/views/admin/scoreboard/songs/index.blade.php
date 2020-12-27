@@ -4,15 +4,15 @@
 
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
-        <a class="btn btn-success" href="{{ route("admin.timers.create") }}">
-            Add Timer
+        <a class="btn btn-success" href="{{ route("admin.songs.create") }}">
+            Add Song
         </a>
     </div>
 </div>
 
 <div class="card">
     <div class="card-header">
-        Timer List
+        Songs List
     </div>
 
     <div class="card-body">
@@ -27,16 +27,10 @@
                             Id
                         </th>
                         <th>
-                            Timer Name
+                            Song Title
                         </th>
                         <th>
-                            Time Duration
-                        </th>
-                        <th>
-                            Start Whistle
-                        </th>
-                        <th>
-                            End Whistle
+                            Song
                         </th>
                         <th>
                             &nbsp;
@@ -44,46 +38,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($timers as $key => $timer)
-                    <tr data-entry-id="{{ $timer->id }}">
+                    @foreach($songs as $key => $song)
+                    <tr data-entry-id="{{ $song->id }}">
                         <td>
 
                         </td>
                         <td>
-                            {{ $timer->id ?? '' }}
+                            {{ $song->id ?? '' }}
                         </td>
                         <td>
-                            {{ $timer->timer_name ?? '' }}
-                        </td>
-                        <td>
-                            {{ $timer->time ?? '' }}
+                            {{ $song->song_name ?? '' }}
                         </td>
                         <td>
                             <audio controls>
-                                <source
-                                    src="/storage/sounds/whistle_clips/{{ $whistles->find($timer->start_whistle_id)->soundclip ?? ''}}"
-                                    type="audio/mpeg">
+                                <source src="/storage/sounds/song_clips/{{ $song->songclip }}" type="audio/mpeg"> 
                             </audio>
-                            {{-- {{ $timer->whistle_id ?? '' }} --}}
+                            {{-- <img height="80px" src="/storage/images/team_logo/{{ $whistle->soundclip }}" alt=""> --}}
+                            {{-- {{ $whistle->soundclip ?? '' }} --}}
                         </td>
                         <td>
-                            <audio controls>
-                                <source
-                                    src="/storage/sounds/whistle_clips/{{ $whistles->find($timer->end_whistle_id)->soundclip ?? ''}}"
-                                    type="audio/mpeg">
-                            </audio>
-                            {{-- {{ $timer->whistle_id ?? '' }} --}}
-                        </td>
-                        <td>
-                            <a class="btn btn-xs btn-primary" href="{{ route('admin.timers.show', $timer->id) }}">
+                            <a class="btn btn-xs btn-primary"
+                                href="{{ route('admin.songs.show', $song->id) }}">
                                 {{ trans('global.view') }}
                             </a>
 
-                            <a class="btn btn-xs btn-info" href="{{ route('admin.timers.edit', $timer->id) }}">
+                            <a class="btn btn-xs btn-info"
+                                href="{{ route('admin.songs.edit', $song->id) }}">
                                 {{ trans('global.edit') }}
                             </a>
 
-                            <form action="{{ route('admin.timers.destroy', $timer->id) }}" method="POST"
+                            <form action="{{ route('admin.songs.destroy', $song->id) }}" method="POST"
                                 onsubmit="return confirm('{{ trans('global.areYouSure') }}');"
                                 style="display: inline-block;">
                                 <input type="hidden" name="_method" value="DELETE">

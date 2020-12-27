@@ -3,7 +3,7 @@
 
 <div class="card">
     <div class="card-header">
-        Show Timer
+        Show Song
     </div>
 
     <div class="card-body">
@@ -15,41 +15,27 @@
                             Id
                         </th>
                         <td>
-                            {{ $timer->id }}
+                            {{ $song->id }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            Timer Name
+                            Song Title
                         </th>
                         <td>
-                            {{ $timer->timer_name }}
+                            {{ $song->song_name }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            Timer Duration
+                            Song Clip
                         </th>
                         <td>
-                            {{ $timer->time }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>
-                            Start Whistle
-                        </th>
-                        <td>
-                            {{ $start_whistles->whistle_name }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>
-                            End Whistle
-                        </th>
-                        <td>
-                            {{ $end_whistles->whistle_name }}
+                            <audio controls>
+                                <source src="/storage/sounds/song_clips/{{ $song->songclip }}" type="audio/mpeg"> 
+                            </audio>
+                            {{-- {{ $whistle->soundclip }} --}}
+                            {{-- <img src="/storage/images/team_logo/{{ $team->logo }}" height="150px" alt=""> --}}
                         </td>
                     </tr>
 

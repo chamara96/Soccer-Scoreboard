@@ -28,12 +28,18 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::resource('games', 'Admin\Scoreboard\GameController');
     Route::get('gameend', 'Admin\Scoreboard\GameController@gameend')->name('gameend');
 
+    // whistles
+    Route::resource('whistles', 'Admin\Scoreboard\WhistleController');
 
     // timer
     Route::resource('timers', 'Admin\Scoreboard\TimerController');
 
     // scoreboards
     Route::resource('scoreboards', 'Admin\Scoreboard\ScoreboardController');
+
+    // songs
+    Route::resource('songs', 'Admin\Scoreboard\SongController');
+
 
     // score controller
     Route::resource('score', 'Admin\Score\ScoreController');
@@ -42,6 +48,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     Route::post('/scorecontrollerpause', 'Admin\Score\ScoreController@btnpause')->name('scorecontrollerpause');
     Route::post('/scorecontrollerresume', 'Admin\Score\ScoreController@btnresume')->name('scorecontrollerresume');
     Route::post('/scorenavigate', 'Admin\Score\ScoreController@scorenavigate')->name('scorenavigate');
+    Route::post('/changetimer', 'Admin\Score\ScoreController@changetimer')->name('changetimer');
+    Route::post('/index_ajax', 'Admin\Score\ScoreController@index_ajax')->name('index_ajax');
+
 });
 
 
@@ -52,7 +61,13 @@ Route::get('publicscore_new', function () {
 });
 
 Route::get('myevent', function () {
-    event(new Event('Hellooo chamara'));
+    $my_arr=[
+        'para1'=>"A",
+        'para2'=>"B",
+        'para3'=>1,
+        'para4'=>2,
+    ];
+    event(new Event($my_arr));
 
     return "Done";
 });

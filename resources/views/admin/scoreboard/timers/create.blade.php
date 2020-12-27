@@ -38,6 +38,41 @@
                 </p>
             </div>
 
+            <div class="form-group">
+                <label for="dropdown">Start Whistle</label>
+                <div class="form-control{{ $errors->has('start_whistle_id') ? ' has-error' : '' }}">
+                    @foreach ($whistles as $whistle)
+                    <input required type="radio" name="start_whistle_id"
+                        value="{{ $whistle->id }}">{{ $whistle->whistle_name }}</label>
+                    @endforeach
+                </div>
+
+                @if ($errors->has('start_whistle_id'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('start_whistle_id') }}</strong>
+                </span>
+                @endif
+
+            </div>
+
+            <div class="form-group">
+                <label for="dropdown">End Whistle</label>
+                <div class="form-control{{ $errors->has('end_whistle_id') ? ' has-error' : '' }}">
+                    @foreach ($whistles as $whistle)
+                    <input required type="radio" name="end_whistle_id"
+                        value="{{ $whistle->id }}">{{ $whistle->whistle_name }}</label>
+                    @endforeach
+                </div>
+
+
+                @if ($errors->has('end_whistle_id'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('end_whistle_id') }}</strong>
+                </span>
+                @endif
+
+            </div>
+
             <div>
                 <input class="btn btn-danger" type="submit" value="{{ trans('global.save') }}">
             </div>

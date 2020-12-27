@@ -24,7 +24,10 @@ class StoreTimerRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'timer_name' => 'required',
+            'time' => 'required',
+            'start_whistle_id' => 'required',
+            'end_whistle_id' => 'required',
         ];
     }
 }

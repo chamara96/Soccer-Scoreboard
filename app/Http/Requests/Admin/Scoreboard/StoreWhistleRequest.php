@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin\Scoreboard;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTimerRequest extends FormRequest
+class StoreWhistleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,10 +24,8 @@ class UpdateTimerRequest extends FormRequest
     public function rules()
     {
         return [
-            'timer_name' => 'required',
-            'time' => 'required',
-            'start_whistle_id' => 'required',
-            'end_whistle_id' => 'required',
+            'whistle_name' => 'required',
+            'soundclip_raw' => 'required|mimes:wav,mpga|max:2048',
         ];
     }
 }

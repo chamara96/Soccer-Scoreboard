@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Scoreboard\StoreTimerRequest;
 use App\Http\Requests\Admin\Scoreboard\UpdateTimerRequest;
 use App\Timer;
+use App\Whistle;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
@@ -20,8 +21,9 @@ class TimerController extends Controller
     public function index()
     {
         $timers = Timer::all();
+        $whistles = Whistle::all();
 
-        return view('admin.scoreboard.timers.index', compact('timers'));
+        return view('admin.scoreboard.timers.index', compact('timers', 'whistles'));
     }
 
     /**
@@ -31,7 +33,8 @@ class TimerController extends Controller
      */
     public function create()
     {
-        return view('admin.scoreboard.timers.create');
+        $whistles = Whistle::all();
+        return view('admin.scoreboard.timers.create', compact('whistles'));
     }
 
     /**
@@ -61,7 +64,9 @@ class TimerController extends Controller
      */
     public function show(Timer $timer)
     {
-        return view('admin.scoreboard.timers.show', compact('timer'));
+        $start_whistles = Whistle::find($timer->start_whistle_id);
+        $end_whistles = Whistle::find($timer->end_whistle_id);
+        return view('admin.scoreboard.timers.show', compact('timer', 'start_whistles', 'end_whistles'));
     }
 
     /**
@@ -72,7 +77,8 @@ class TimerController extends Controller
      */
     public function edit(Timer $timer)
     {
-        return view('admin.scoreboard.timers.edit', compact('timer'));
+        $whistles = Whistle::all();
+        return view('admin.scoreboard.timers.edit', compact('timer', 'whistles'));
     }
 
     /**
@@ -114,6 +120,4 @@ class TimerController extends Controller
 
         return response()->noContent();
     }
-
-
 }

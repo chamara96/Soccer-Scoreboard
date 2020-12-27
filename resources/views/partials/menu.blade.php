@@ -26,7 +26,15 @@
                             Teams
                         </a>
                     </li>
-                    
+
+                    <li class="nav-item" style="margin-left: 30px;">
+                        <a href="{{ route("admin.whistles.index") }}"
+                            class="nav-link {{ request()->is('admin/whistles') || request()->is('admin/whistles/*') ? 'active' : '' }}">
+                            <i class="fa-fw fas fa-user nav-icon"> </i>
+                            Whistles
+                        </a>
+                    </li>
+
                     <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.timers.index") }}"
                             class="nav-link {{ request()->is('admin/timers') || request()->is('admin/timers/*') ? 'active' : '' }}">
@@ -34,6 +42,7 @@
                             Timers
                         </a>
                     </li>
+
                     <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.games.index") }}"
                             class="nav-link {{ request()->is('admin/games') || request()->is('admin/games/*') ? 'active' : '' }}">
@@ -41,7 +50,7 @@
                             Games
                         </a>
                     </li>
-                    
+
                     <li class="nav-item" style="margin-left: 30px;">
                         <a href="{{ route("admin.scoreboards.index") }}"
                             class="nav-link {{ request()->is('admin/scoreboards') || request()->is('admin/scoreboards/*') ? 'active' : '' }}">
@@ -52,6 +61,16 @@
                 </ul>
             </li>
             {{-- Scoreboard Controller END --}}
+
+
+            {{-- Song Manage START --}}
+            <li class="nav-item">
+                <a href="{{ route("admin.songs.index") }}" class="nav-link">
+                    <i class="nav-icon fas fa-fw fa-tachometer-alt"> </i>
+                    Songs
+                </a>
+            </li>
+            {{-- Song Manage END --}}
 
             @can('users_manage')
             <li class="nav-item nav-dropdown">
