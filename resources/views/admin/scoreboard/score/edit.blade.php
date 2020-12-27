@@ -75,7 +75,7 @@
                 <div class="col-md-5">
                     <select class="form-control{{ $errors->has('team_a') ? ' has-error' : '' }}" name="team_a">
                         @foreach($teams as $team)
-                        <option {{ $team->id===$game->team_a ? 'selected' : '' }} value="{{ $team->id }}">
+                        <option {{ $team->id==$game->team_a ? 'selected' : '' }} value="{{ $team->id }}">
                             {{ $team->team_name }}</option>
                         @endforeach
                     </select>
@@ -94,7 +94,7 @@
                 <div class="col-md-5">
                     <select class="form-control{{ $errors->has('team_b') ? ' has-error' : '' }}" name="team_b">
                         @foreach($teams as $team)
-                        <option {{ $team->id===$game->team_b ? 'selected' : '' }} value="{{ $team->id }}">
+                        <option {{ $team->id==$game->team_b ? 'selected' : '' }} value="{{ $team->id }}">
                             {{ $team->team_name }}</option>
                         @endforeach
                     </select>

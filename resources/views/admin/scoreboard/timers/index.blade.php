@@ -121,7 +121,7 @@
                     return $(entry).data('entry-id')
                 });
 
-                if (ids.length === 0) {
+                if (ids.length == 0) {
                     alert('{{ trans('global.datatables.zero_selected') }}')
 
                     return

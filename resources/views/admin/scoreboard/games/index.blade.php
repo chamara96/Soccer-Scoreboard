@@ -63,7 +63,7 @@
                         </td>
                         <td>
                             <h4><span
-                                class="badge {{  $game->status === 0 ? 'badge-warning' : ($game->status === 1 ? 'badge-success' : 'badge-danger') }}">{{  $game->status === 0 ? 'Offline' : ($game->status === 1 ? 'Active' : 'Ended') }}</span></h4>
+                                class="badge {{  $game->status == 0 ? 'badge-warning' : ($game->status == 1 ? 'badge-success' : 'badge-danger') }}">{{  $game->status == 0 ? 'Offline' : ($game->status == 1 ? 'Active' : 'Ended') }}</span></h4>
 
                         </td>
                         <td>
@@ -131,7 +131,7 @@
                     return $(entry).data('entry-id')
                 });
 
-                if (ids.length === 0) {
+                if (ids.length == 0) {
                     alert('{{ trans('global.datatables.zero_selected') }}')
 
                     return

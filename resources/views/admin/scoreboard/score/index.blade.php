@@ -34,11 +34,11 @@
                         <h1 id="score_a" class="display-1 text-center">{{$last_scoreboard_updated->score_team_a}}</h1>
                         <div class="row text-center">
                             <div class="col">
-                                <button {{ $front_timer['status']===1 ? '' : 'disabled' }} id="team_a_up"
+                                <button {{ $front_timer['status']==1 ? '' : 'disabled' }} id="team_a_up"
                                     class="btn btn-dark text-center border rounded-0" type="button"
                                     style="width: 70px;height: 70px;"><i class="fas fa-arrow-circle-up"></i></button>
                             </div>
-                            <div class="col"><button {{ $front_timer['status']===1 ? '' : 'disabled' }} id="team_a_down"
+                            <div class="col"><button {{ $front_timer['status']==1 ? '' : 'disabled' }} id="team_a_down"
                                     class="btn btn-dark border rounded-0" type="button"
                                     style="width: 70px;height: 70px;"><i class="fas fa-arrow-circle-down"></i></button>
                             </div>
@@ -49,11 +49,11 @@
                             src="/storage/images/team_logo/{{ $team_b->logo }}" style="width: 100px;height: 100px;">
                         <h1 id="score_b" class="display-1 text-center">{{$last_scoreboard_updated->score_team_b}}</h1>
                         <div class="row text-center">
-                            <div class="col"><button {{ $front_timer['status']===1 ? '' : 'disabled' }} id="team_b_up"
+                            <div class="col"><button {{ $front_timer['status']==1 ? '' : 'disabled' }} id="team_b_up"
                                     class="btn btn-dark border rounded-0" type="button"
                                     style="width: 70px;height: 70px;"><i class="fas fa-arrow-circle-up"></i></button>
                             </div>
-                            <div class="col"><button {{ $front_timer['status']===1 ? '' : 'disabled' }} id="team_b_down"
+                            <div class="col"><button {{ $front_timer['status']==1 ? '' : 'disabled' }} id="team_b_down"
                                     class="btn btn-dark border rounded-0" type="button"
                                     style="width: 70px;height: 70px;"><i class="fas fa-arrow-circle-down"></i></button>
                             </div>
@@ -81,11 +81,11 @@
             </div>
 
             <div class="dropdown">
-                <select {{ $last_scoreboard_updated->status===1 ? 'disabled' : '' }} id="dropdown-timer"
+                <select {{ $last_scoreboard_updated->status==1 ? 'disabled' : '' }} id="dropdown-timer"
                     name="Select-item">
                     {{-- <option value="" disabled selected>Select Timer</option> --}}
                     @foreach ($timers as $timer)
-                    <option {{ $timer->id===$last_scoreboard_updated->timer_id ? 'selected' : '' }} href="#"
+                    <option {{ $timer->id==$last_scoreboard_updated->timer_id ? 'selected' : '' }} href="#"
                         value="{{$timer->id}}">{{$timer->timer_name}} - {{$timer->time}} min</option>
                     @endforeach
                 </select>

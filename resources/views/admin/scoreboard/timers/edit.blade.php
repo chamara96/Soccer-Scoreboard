@@ -43,7 +43,7 @@
                 <div class="form-control{{ $errors->has('start_whistle_id') ? ' has-error' : '' }}">
                     @foreach ($whistles as $whistle)
                     <input required type="radio" name="start_whistle_id" value="{{ $whistle->id }}"
-                        {{ ($whistle->id===$timer->start_whistle_id)? "checked" : "" }}>{{ $whistle->whistle_name }}</label>
+                        {{ ($whistle->id==$timer->start_whistle_id)? "checked" : "" }}>{{ $whistle->whistle_name }}</label>
                     @endforeach
                 </div>
 
@@ -60,7 +60,7 @@
                 <div class="form-control{{ $errors->has('end_whistle_id') ? ' has-error' : '' }}">
                     @foreach ($whistles as $whistle)
                     <input required type="radio" name="end_whistle_id" value="{{ $whistle->id }}"
-                        {{ ($whistle->id===$timer->end_whistle_id)? "checked" : "" }}>{{ $whistle->whistle_name }}</label>
+                        {{ ($whistle->id==$timer->end_whistle_id)? "checked" : "" }}>{{ $whistle->whistle_name }}</label>
                     @endforeach
                 </div>
 
