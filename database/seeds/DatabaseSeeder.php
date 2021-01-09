@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(TeamSeeder::class);
         $this->call(WhistleSeeder::class);
         $this->call(TimerSeeder::class);
-        $this->call(GameSeeder::class);;
+        $this->call(GameSeeder::class);
+        $this->call(SettingSeeder::class);
     }
 }

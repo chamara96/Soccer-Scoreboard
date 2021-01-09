@@ -40,6 +40,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin', 'as' => 'admin.'], 
     // songs
     Route::resource('songs', 'Admin\Scoreboard\SongController');
 
+    // ads
+    Route::resource('ads', 'Admin\Scoreboard\AdController');
+
+    // settings
+    Route::resource('settings', 'Admin\Scoreboard\SettingController');
+
 
     // score controller
     Route::resource('score', 'Admin\Score\ScoreController');

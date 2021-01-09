@@ -72,6 +72,24 @@
             </li>
             {{-- Song Manage END --}}
 
+            {{-- Ads Manage START --}}
+            <li class="nav-item">
+                <a href="{{ route("admin.ads.index") }}" class="nav-link">
+                    <i class="nav-icon fas fa-fw fa-tachometer-alt"> </i>
+                    Ads Manage
+                </a>
+            </li>
+            {{-- Ads Manage END --}}
+
+            {{-- Ads Manage START --}}
+            <li class="nav-item">
+                <a href="{{ route("admin.settings.index") }}" class="nav-link">
+                    <i class="nav-icon fas fa-fw fa-tachometer-alt"> </i>
+                    Settings
+                </a>
+            </li>
+            {{-- Ads Manage END --}}
+
             @can('users_manage')
             <li class="nav-item nav-dropdown">
                 <a class="nav-link  nav-dropdown-toggle" href="#">

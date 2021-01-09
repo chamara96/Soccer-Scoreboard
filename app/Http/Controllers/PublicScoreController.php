@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Advertisement;
 use App\Counters;
 use App\Game;
 use App\Scoreboard;
+use App\Setting;
 use App\Timer;
 use App\Team;
 use Carbon\Carbon;
@@ -89,7 +91,10 @@ class PublicScoreController extends Controller
             }
             // End Timer
 
-            return view('publicscore.index', compact('game', 'team_a', 'team_b', 'livescore', 'timer', 'front_timer'));
+            $ads = Advertisement::where('game_id', $gid)->get();
+            $bg_img=Setting::find(1);
+
+            return view('publicscore.index', compact('game','bg_img', 'team_a', 'team_b', 'livescore', 'timer', 'front_timer', 'ads'));
         } else {
             dd($request->all());
         }
