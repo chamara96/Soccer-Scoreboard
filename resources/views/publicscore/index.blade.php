@@ -23,7 +23,7 @@
         }
 
         .team-name {
-            font-weight: normal;
+            font-weight: bold;
             text-shadow: 0px 0px 5px rgb(0, 0, 0), 0px 0px 10px rgb(0, 0, 0),
                 0px 0px 20px rgb(0, 0, 0), 0px 0px 30px rgb(0, 0, 0),
                 0px 0px 60px rgb(255, 255, 255);
@@ -37,14 +37,15 @@
         }
 
         .score-glow {
-            font-weight: normal;
+            font-weight: bold;
+            font-size: 225px;
             text-shadow: 0px 0px 5px rgb(0, 0, 0), 0px 0px 10px rgb(0, 0, 0),
                 0px 0px 20px rgb(0, 0, 0), 0px 0px 30px rgb(0, 0, 0),
                 0px 0px 60px rgb(255, 255, 255);
         }
 
         .timername-glow {
-            font-weight: normal;
+            font-weight: bold;
             text-shadow: 0px 0px 5px rgb(255, 255, 255), 0px 0px 10px rgb(255, 255, 255),
                 0px 0px 20px rgb(255, 255, 255), 0px 0px 30px rgb(255, 255, 255),
                 0px 0px 60px rgb(0, 0, 0);
@@ -66,7 +67,7 @@
                     <h1 class="display-2 text-center game-name" style="color: rgb(255,255,255);margin-top: 30px;">
                         {{ $game->game_name }}</h1>
                     <div class="text-center" style="height: 100%;"><img class="img-glow"
-                            src="/storage/images/game_logo/{{ $game->game_logo }}" style="height: 100%;"></div>
+                            src="/storage/images/game_logo/{{ $game->game_logo }}" style="/*height: 100%;*/ height:104px;"></div>
                 </div>
             </div>
             <div class="row text-center">
@@ -94,11 +95,11 @@
                     <div class="row text-center">
                         <div class="col">
                             <h1 id="team_a_score" class="display-1 text-left score-glow"
-                                style="font-size: 150px;color: rgb(255,255,255);">{{$livescore->score_team_a}}</h1>
+                                style="color: rgb(255,255,255);">{{$livescore->score_team_a}}</h1>
                         </div>
                         <div class="col">
                             <h1 id="team_b_score" class="display-1 text-right score-glow"
-                                style="font-size: 150px;color: rgb(255,255,255);">{{$livescore->score_team_b}}</h1>
+                                style="color: rgb(255,255,255);">{{$livescore->score_team_b}}</h1>
                         </div>
                     </div>
                 </div>
@@ -112,7 +113,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row text-center" style="margin-top: 50px;">
+            <div class="row text-center" style="/*margin-top: 50px;*/ margin-right: 0; margin-left: 15px !important;">
                 <div class="col owl-carousel owl-theme" style="height: 100%;">
                     {{-- <img src="assets-public/img/ZtdhrUA.jpg" height="100%" style="width: 100%;"> --}}
                     @foreach ($ads as $ad)
@@ -133,11 +134,12 @@
     <script>
         $('.owl-carousel').owlCarousel({
             loop: true,
-            margin: 10,
+            margin: 20,
+            // stagePadding: 10,
             nav: false,
             dots:false,
             autoplay:true,
-            autoplayTimeout:2000,
+            autoplayTimeout:8000,
             responsive: {
                 0: {
                     items: 1
